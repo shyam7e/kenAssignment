@@ -4,7 +4,8 @@ import {
   IndividualAlbumScreen,
   IndividualSongScreen,
   AlbumListingScreen,
-} from './screens';
+} from '../../screens/ScreenExports';
+import {createStackNavigator} from '@react-navigation/stack';
 
 const Stacks = () => {
   const Stack = createStackNavigator();
