@@ -13,38 +13,54 @@ import {instance, headers} from '../services/api';
 import {NAPSTER_API_KEY, BASE_URL} from '@env';
 import AlbumCard from '../components/Cards/AlbumCard';
 const AlbumListingScreen = () => {
+  const pageSize = 10;
+  const [refresh, setRefresh] = useState(false);
+  const [datas, setDatas] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
   useEffect(() => {
+    setIsLoading(true);
     instance
-      .get('/albums/new')
+      .get(`/albums/new?limit=${pageSize}&offset=${page * pageSize}`)
       .then(res => {
-        console.log('ress', res);
-        setDatas(res.data.albums);
+        // setDatas([...datas, ...res.data.albums]);
+        if (res.data.albums.length > 0) {
+          setDatas([...datas, ...res.data.albums]);
+        } else {
+          setDatas(res.data.albums);
+        }
         setIsLoading(false);
       })
       .catch(err => {
         console.log('error', err);
         setIsLoading(false);
       });
-  }, []);
-  const [refresh, setRefresh] = useState(false);
-  const [datas, setDatas] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  }, [refresh]);
+
   return (
     <SafeAreaView style={styles.container}>
-      {isLoading ? (
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" />
-        </View>
-      ) : (
-        <View style={{flex: 1, backgroundColor: '#121212'}}>
-          <Text style={styles.heading}>Top albums</Text>
-          <FlatList
-            data={datas}
-            renderItem={({item}) => <AlbumCard item={item} />}
-            keyExtractor={item => item.id}
-          />
-        </View>
-      )}
+      <View style={{flex: 1, backgroundColor: '#121212'}}>
+        <Text style={styles.heading}>Top Albums</Text>
+        <FlatList
+          data={datas}
+          renderItem={({item}) => <AlbumCard item={item} />}
+          keyExtractor={(item, key) => key}
+          onEndReached={() => {
+            if (!isLoading) {
+              setPage(page + 1);
+              setRefresh(!refresh);
+              console.log(page + 1);
+            }
+          }}
+          onEndReachedThreshold={0.4}
+          extraData={datas}
+          ListFooterComponent={
+            isLoading && <ActivityIndicator size={'large'} color="#FFFFFF" />
+          }
+          initialNumToRender={7}
+        />
+      </View>
+      {/* )} */}
     </SafeAreaView>
   );
 };

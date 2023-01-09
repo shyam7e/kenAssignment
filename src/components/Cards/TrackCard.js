@@ -1,39 +1,33 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React, {useState, memo} from 'react';
 import {useNavigation} from '@react-navigation/native';
 
-const AlbumCard = ({item}) => {
+const TrackCard = ({item, imageUrl}) => {
   const [images, setImages] = useState([]);
   const [image, setImage] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
-  const handleNavigation = () => {};
+  const handleNavigation = () => {
+    navigation.navigate('IndividualSongScreen', {
+      item: item,
+      imageUrl: imageUrl,
+    });
+  };
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => {
-        navigation.navigate('IndividualAlbumScreen', {item: item});
-      }}>
+    <TouchableOpacity style={styles.container} onPress={handleNavigation}>
       <View style={styles.image}>
         <Image
           source={{
-            uri: `https://api.napster.com/imageserver/v2/albums/${item.id}/images/500x500.jpg`,
+            uri: imageUrl,
           }}
-          style={{width: '100%', height: 120, borderRadius: 4}}
+          style={{width: '100%', height: 80, borderRadius: 4}}
         />
       </View>
       <View style={styles.info}>
         {item?.name && (
           <Text style={styles.infoText}>
-            <Text style={styles.textHeading}>Album name : </Text>
+            <Text style={styles.textHeading}>Track name : </Text>
             {item.name}
           </Text>
         )}
@@ -43,24 +37,12 @@ const AlbumCard = ({item}) => {
             {item.artistName}
           </Text>
         )}
-        {item?.trackCount && (
-          <Text style={styles.infoText}>
-            <Text style={styles.textHeading}>Tracks : </Text>
-            {item.trackCount}
-          </Text>
-        )}
-        {item?.label && (
-          <Text style={styles.infoText}>
-            <Text style={styles.textHeading}>Label : </Text>
-            {item.label}
-          </Text>
-        )}
       </View>
     </TouchableOpacity>
   );
 };
 
-export default memo(AlbumCard);
+export default memo(TrackCard);
 
 const styles = StyleSheet.create({
   container: {
@@ -75,14 +57,14 @@ const styles = StyleSheet.create({
   },
   image: {
     backgroundColor: '#424242',
-    width: 120,
+    width: 80,
     marginRight: 4,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 4,
   },
   info: {
-    backgroundColor: '#424242',
+    backgroundColor: '#111427',
     flex: 1,
     justifyContent: 'center',
     paddingLeft: 12,
