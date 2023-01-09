@@ -2,16 +2,15 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
-  Image,
   ActivityIndicator,
   SafeAreaView,
   FlatList,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {instance, headers} from '../services/api';
-import {NAPSTER_API_KEY, BASE_URL} from '@env';
+import {instance} from '../services/api';
 import AlbumCard from '../components/Cards/AlbumCard';
+import AlbumIcon from '../assets/Icons/albumIcon.svg';
+import Colors from '../styles/colors';
 const AlbumListingScreen = () => {
   const pageSize = 10;
   const [refresh, setRefresh] = useState(false);
@@ -23,7 +22,6 @@ const AlbumListingScreen = () => {
     instance
       .get(`/albums/new?limit=${pageSize}&offset=${page * pageSize}`)
       .then(res => {
-        // setDatas([...datas, ...res.data.albums]);
         if (res.data.albums.length > 0) {
           setDatas([...datas, ...res.data.albums]);
         } else {
@@ -39,10 +37,13 @@ const AlbumListingScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{flex: 1, backgroundColor: '#212121'}}>
-        <Text style={styles.heading}>Top Albumsds</Text>
+      <View style={{flex: 1, backgroundColor: Colors.lightblack}}>
+        <View style={styles.albumTextHeading}>
+          <AlbumIcon />
+          <Text style={styles.heading}>TOP Albums</Text>
+        </View>
         <FlatList
-          style={{backgroundColor: '#d3d3d3'}}
+          style={styles.flatListStyle}
           data={datas}
           renderItem={({item}) => <AlbumCard item={item} />}
           keyExtractor={(item, key) => key}
@@ -56,12 +57,13 @@ const AlbumListingScreen = () => {
           onEndReachedThreshold={0.7}
           extraData={datas}
           ListFooterComponent={
-            isLoading && <ActivityIndicator size={'large'} color="#FFFFFF" />
+            isLoading && (
+              <ActivityIndicator size={'large'} color={Colors.white} />
+            )
           }
           initialNumToRender={7}
         />
       </View>
-      {/* )} */}
     </SafeAreaView>
   );
 };
@@ -69,7 +71,7 @@ const AlbumListingScreen = () => {
 export default AlbumListingScreen;
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#121212'},
+  container: {flex: 1},
 
   loaderContainer: {
     flex: 1,
@@ -79,10 +81,19 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontFamily: 'Gotham Rounded Bold',
-    color: '#FFFFFF',
+    color: '#000000',
     fontSize: 25,
     textAlign: 'center',
+  },
+  flatListStyle: {
+    backgroundColor: Colors.primary,
+  },
+  albumTextHeading: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 45,
-    marginBottom: 16,
+    marginBottom: 2,
+    backgroundColor: '#FFFFFF',
   },
 });

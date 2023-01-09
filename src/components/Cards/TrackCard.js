@@ -1,8 +1,9 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React, {useState, memo} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
-
+import FastImage from 'react-native-fast-image';
+import Colors from '../../styles/colors';
 const TrackCard = ({item, imageUrl, allTracks, currentTrackIndex}) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const navigation = useNavigation();
@@ -11,7 +12,7 @@ const TrackCard = ({item, imageUrl, allTracks, currentTrackIndex}) => {
       item: item,
       imageUrl: imageUrl,
       allTracks: allTracks,
-      currentTrackIndex: currentTrackIndex,
+      trackIndex: currentTrackIndex,
     });
   };
   const handlePlayPause = () => {
@@ -24,9 +25,10 @@ const TrackCard = ({item, imageUrl, allTracks, currentTrackIndex}) => {
   return (
     <TouchableOpacity style={styles.container} onPress={handleNavigation}>
       <View style={styles.image}>
-        <Image
+        <FastImage
           source={{
             uri: imageUrl,
+            priority: FastImage.priority.high,
           }}
           style={{width: 80, height: 80, borderRadius: 40, margin: 8}}
         />
@@ -88,6 +90,6 @@ const styles = StyleSheet.create({
   },
   textHeading: {
     fontWeight: '600',
-    color: '#d3d3d3',
+    color: Colors.primary,
   },
 });

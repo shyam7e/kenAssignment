@@ -1,22 +1,20 @@
 import {
   StyleSheet,
-  Text,
   View,
   Image,
   FlatList,
   ActivityIndicator,
-  ScrollView,
   Dimensions,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {instance} from '../services/api';
 import TrackCard from '../components/Cards/TrackCard';
+import Colors from '../styles/colors';
 
 const IndividualAlbumScreen = ({route}) => {
   const {item} = route.params;
-  const {width, height} = Dimensions.get('window');
+  const {height} = Dimensions.get('window');
   const [imageUrl, setImageUrl] = useState('');
-  const [refresh, setRefresh] = useState(false);
   const [datas, setDatas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -24,7 +22,6 @@ const IndividualAlbumScreen = ({route}) => {
     instance
       .get(`/albums/${item.id}/tracks`)
       .then(res => {
-        console.log('albumTracks', res);
         setDatas(res.data.tracks);
         setImageUrl(
           `https://api.napster.com/imageserver/v2/albums/${item.id}/images/500x500.jpg`,
@@ -50,12 +47,12 @@ const IndividualAlbumScreen = ({route}) => {
     <View style={styles.container}>
       {isLoading ? (
         <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color={'#ffffff'} />
+          <ActivityIndicator size="large" color={Colors.white} />
         </View>
       ) : (
         <FlatList
           showsVerticalScrollIndicator={true}
-          style={{width: '100%', height: '100%', backgroundColor: '#2d2d2d'}}
+          style={styles.flatlistStyle}
           stickyHeaderIndices={[0]}
           stickyHeaderHiddenOnScroll={true}
           ListHeaderComponent={() => (
@@ -91,4 +88,9 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   loaderContainer: {width: '100%', height: '100%', justifyContent: 'center'},
+  flatlistStyle: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: Colors.lightblack2,
+  },
 });

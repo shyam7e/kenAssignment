@@ -1,8 +1,9 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React, {memo, useMemo} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
-
+import FastImage from 'react-native-fast-image';
+import Colors from '../../styles/colors';
 const AlbumCard = ({item}) => {
   const navigation = useNavigation();
   const handleNavigation = () => {
@@ -12,9 +13,10 @@ const AlbumCard = ({item}) => {
   return (
     <TouchableOpacity style={styles.container} onPress={handleNavigation}>
       <View style={styles.image}>
-        <Image
+        <FastImage
           source={{
             uri: `https://api.napster.com/imageserver/v2/albums/${memoizedItem.id}/images/500x500.jpg`,
+            priority: FastImage.priority.high,
           }}
           style={{width: '100%', height: 120, borderRadius: 4}}
         />
@@ -77,11 +79,11 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   infoText: {
-    color: '#FFFFFF',
+    color: Colors.white,
     fontFamily: 'VarelaRound-Regular',
   },
   textHeading: {
     fontWeight: '600',
-    color: '#d3d3d3',
+    color: Colors.primary,
   },
 });
