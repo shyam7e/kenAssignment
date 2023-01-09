@@ -36,7 +36,16 @@ const IndividualAlbumScreen = ({route}) => {
         setIsLoading(false);
       });
   }, []);
-
+  function renderItem({item, index}) {
+    return (
+      <TrackCard
+        item={item}
+        imageUrl={imageUrl}
+        allTracks={datas}
+        currentTrackIndex={index}
+      />
+    );
+  }
   return (
     <View style={styles.container}>
       {isLoading ? (
@@ -64,7 +73,7 @@ const IndividualAlbumScreen = ({route}) => {
             </View>
           )}
           data={datas}
-          renderItem={({item}) => <TrackCard item={item} imageUrl={imageUrl} />}
+          renderItem={renderItem}
           keyExtractor={(item, index) => index}
         />
       )}

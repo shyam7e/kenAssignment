@@ -1,19 +1,26 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React, {useState, memo} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
 
-const TrackCard = ({item, imageUrl}) => {
-  const [images, setImages] = useState([]);
-  const [image, setImage] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+const TrackCard = ({item, imageUrl, allTracks, currentTrackIndex}) => {
+  const [isPlaying, setIsPlaying] = useState(false);
   const navigation = useNavigation();
   const handleNavigation = () => {
-    navigation.navigate('IndividualSongScreen', {
+    navigation.push('IndividualSongScreen', {
       item: item,
       imageUrl: imageUrl,
+      allTracks: allTracks,
+      currentTrackIndex: currentTrackIndex,
     });
   };
-
+  const handlePlayPause = () => {
+    if (isPlaying) {
+      setIsPlaying(false);
+    } else {
+      setIsPlaying(true);
+    }
+  };
   return (
     <TouchableOpacity style={styles.container} onPress={handleNavigation}>
       <View style={styles.image}>
@@ -21,7 +28,7 @@ const TrackCard = ({item, imageUrl}) => {
           source={{
             uri: imageUrl,
           }}
-          style={{width: '100%', height: 80, borderRadius: 4}}
+          style={{width: 80, height: 80, borderRadius: 40, margin: 8}}
         />
       </View>
       <View style={styles.info}>
@@ -37,6 +44,12 @@ const TrackCard = ({item, imageUrl}) => {
             {item.artistName}
           </Text>
         )}
+        {item?.playbackSeconds && (
+          <Text style={styles.infoText}>
+            <Text style={styles.textHeading}>Track duration : </Text>
+            {moment.utc(item.playbackSeconds * 1000).format('mm:ss')}
+          </Text>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -47,7 +60,6 @@ export default memo(TrackCard);
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f7f7f7',
-    // height: 80,
     marginHorizontal: 16,
     marginBottom: 12,
     borderRadius: 4,
@@ -57,7 +69,7 @@ const styles = StyleSheet.create({
   },
   image: {
     backgroundColor: '#424242',
-    width: 80,
+    width: 100,
     marginRight: 4,
     justifyContent: 'center',
     alignItems: 'center',

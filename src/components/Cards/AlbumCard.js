@@ -1,58 +1,47 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
-import React, {useState, memo} from 'react';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import React, {memo, useMemo} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
 
 const AlbumCard = ({item}) => {
-  const [images, setImages] = useState([]);
-  const [image, setImage] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
-  const handleNavigation = () => {};
-
+  const handleNavigation = () => {
+    navigation.push('IndividualAlbumScreen', {item: memoizedItem});
+  };
+  const memoizedItem = useMemo(() => item, [item]);
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => {
-        navigation.navigate('IndividualAlbumScreen', {item: item});
-      }}>
+    <TouchableOpacity style={styles.container} onPress={handleNavigation}>
       <View style={styles.image}>
         <Image
           source={{
-            uri: `https://api.napster.com/imageserver/v2/albums/${item.id}/images/500x500.jpg`,
+            uri: `https://api.napster.com/imageserver/v2/albums/${memoizedItem.id}/images/500x500.jpg`,
           }}
           style={{width: '100%', height: 120, borderRadius: 4}}
         />
       </View>
       <View style={styles.info}>
-        {item?.name && (
+        {memoizedItem?.name && (
           <Text style={styles.infoText}>
             <Text style={styles.textHeading}>Album name : </Text>
-            {item.name}
+            {memoizedItem.name}
           </Text>
         )}
-        {item?.artistName && (
+        {memoizedItem?.artistName && (
           <Text style={styles.infoText}>
             <Text style={styles.textHeading}>Artist name : </Text>
-            {item.artistName}
+            {memoizedItem.artistName}
           </Text>
         )}
-        {item?.trackCount && (
+        {memoizedItem?.trackCount && (
           <Text style={styles.infoText}>
             <Text style={styles.textHeading}>Tracks : </Text>
-            {item.trackCount}
+            {memoizedItem.trackCount}
           </Text>
         )}
-        {item?.label && (
+        {memoizedItem?.released && (
           <Text style={styles.infoText}>
-            <Text style={styles.textHeading}>Label : </Text>
-            {item.label}
+            <Text style={styles.textHeading}>Release : </Text>
+            {moment(memoizedItem.released).format('MMM YYYY')}
           </Text>
         )}
       </View>
@@ -65,7 +54,6 @@ export default memo(AlbumCard);
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f7f7f7',
-    // height: 80,
     marginHorizontal: 16,
     marginBottom: 12,
     borderRadius: 4,

@@ -10,7 +10,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 const Stacks = () => {
   const Stack = createStackNavigator();
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="AlbumListingScreen">
       <Stack.Screen
         name="AlbumListingScreen"
         component={AlbumListingScreen}

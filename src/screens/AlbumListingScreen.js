@@ -39,9 +39,10 @@ const AlbumListingScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{flex: 1, backgroundColor: '#121212'}}>
-        <Text style={styles.heading}>Top Albums</Text>
+      <View style={{flex: 1, backgroundColor: '#212121'}}>
+        <Text style={styles.heading}>Top Albumsds</Text>
         <FlatList
+          style={{backgroundColor: '#d3d3d3'}}
           data={datas}
           renderItem={({item}) => <AlbumCard item={item} />}
           keyExtractor={(item, key) => key}
@@ -52,7 +53,7 @@ const AlbumListingScreen = () => {
               console.log(page + 1);
             }
           }}
-          onEndReachedThreshold={0.4}
+          onEndReachedThreshold={0.7}
           extraData={datas}
           ListFooterComponent={
             isLoading && <ActivityIndicator size={'large'} color="#FFFFFF" />
@@ -69,12 +70,7 @@ export default AlbumListingScreen;
 
 const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#121212'},
-  button: {
-    backgroundColor: 'pink',
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+
   loaderContainer: {
     flex: 1,
     backgroundColor: '#424242',
